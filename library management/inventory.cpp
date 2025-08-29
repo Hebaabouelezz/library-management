@@ -8,12 +8,12 @@ Book* searchById(string id, Inventory* myInventory) {
 	
 	for (auto& element : myInventory->myBooks) {
 		if (id == element.id) {
-			return &element;
+			
 			cout << "The Book with id: " << element.id << endl;
 			cout << "The Book Name: " << element.name << endl;
 			cout << "The Book Author: " << element.author << endl;
 			cout << "The Book Category: " << element.category << endl;
-			break;
+			return &element;
 		}
 	}
 	return nullptr;
@@ -191,16 +191,6 @@ void addItem(Inventory* myInventory) {
 	getline(cin >> ws, newBook.author);
 	cout << "enter book category:";
 	getline(cin >> ws, newBook.category);
-	cout << "enter status( 0=sold,1=borrowed,2=exists:";
-	cin >> newBook.status;
-	cout << "enter return date :";
-	cin >> newBook.returnDate;
-	cout << "enter quantity:";
-	cin >> newBook.quantity;
-	cout << "enter sellprice:";
-	cin >> newBook.sellPrice;
-	cout << "enter borrow price per day:";
-	cin >> newBook.borrowPriceByDay;
 	myInventory->myBooks.push_back(newBook);
 	cout << "book is add";
 }
