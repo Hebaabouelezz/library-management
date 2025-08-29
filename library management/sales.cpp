@@ -3,6 +3,16 @@
 #include<string>
 using namespace std;
 
+void insertDummyBooksData(Inventory*myInventory) {
+	Book book;
+	book.id = "11111";
+	book.name = "c++";
+	book.author = "heba";
+	book.category = "programming";
+	book.sellPrice = 50;
+	myInventory->myBooks.push_back(book);
+}
+
 
 void getCustomerData(string &name, string &nationalId, string &phone) {
 	cout << "enter customer name:";
@@ -16,12 +26,13 @@ void getCustomerData(string &name, string &nationalId, string &phone) {
 
 void proccessSales(int UserAccess,int salesStatus, Book* BookSale, int borrowPeriod, Inventory* myInventory,string id,string &name, string &nationalId, string &phone) {
 	//check it is owner's and operation's or customer's email
-	if (UserAccess != 0 && UserAccess != 2) {
-		cout << "No Access:" << endl;
-		return;
-	}
+	
 	//search book
 	Book* foundBook = searchById(id, myInventory);
+	if (!foundBook) {
+		cout << "book not found" << endl;
+		return;
+	}
 	int quantity;
 	cout << "enter quantity:";
 	cin >> quantity;
@@ -31,6 +42,7 @@ void proccessSales(int UserAccess,int salesStatus, Book* BookSale, int borrowPer
 		cout << "price is:" << price << endl;
 		getCustomerData(name, nationalId, phone);
 		BookSale->quantity -= quantity;
+		cout << "book bought successfully"<<endl;
 
 	}
 	else if (salesStatus == 1) {
@@ -38,6 +50,7 @@ void proccessSales(int UserAccess,int salesStatus, Book* BookSale, int borrowPer
 		cout << "price is:" << price << endl;
 		getCustomerData(name, nationalId, phone);
 		BookSale->quantity -= quantity;
+		cout << "book borrowed successfully"<<endl;
 
 	}
 	else
