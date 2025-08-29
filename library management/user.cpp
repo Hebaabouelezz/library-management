@@ -1,16 +1,11 @@
-﻿
 #include "user.h"
 #include <iostream>
 
 void insertDummyUserData(User* owner, User* operation) {
-	owner->access = UserAccess::owner;
 	owner->email = "owner@mylibrary.com";
-	owner->name = "ahmed";
-	owner->password = "123456";
+	owner->password = "123456789";
 
-	operation->access = UserAccess::operation;
 	operation->email = "operation@mylibrary.com";
-	operation->name = "mohamed";
 	operation->password = "123456789";
 }
 
@@ -78,72 +73,46 @@ void signup(User* operation) {
 
 
 int login(User* owner, User* operation) {
-
-	// set the user access by default customer
-	int userStatus = UserAccess::customer;
-
-	// choose which account to login
 	int choice;
-	cout << "Login" << endl;
-	cout << "0. Owner\n1. User (Customer)\n2. Operation\n";
+	cout << "Login"<<endl;
+	cout << "0. Owner"<<endl;
+	cout << "1. User (Customer)"<<endl;
+	cout << "2. Operation"<<endl;
 	cout << "Choose a number: ";
 	cin >> choice;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	// if customer → no login needed
-	if (choice == 1) {
-		cout << "Logged in as Customer" << endl;
-		return UserAccess::customer;
-	}
-
-	// select account to check
-
-	User* account = nullptr;
-	if (choice == 0) account = owner;
-	else if (choice == 2) account = operation;
-
-
-	// get login data from user
 	string email, password;
-	int attempts = 0;
-	const int MAX_ATTEMPTS = 3;
+	cout << "please insert your email: ";
+	cin >> email;
+	cout << "please insert your password: ";
+	cin >> password;
 
-	while (attempts < MAX_ATTEMPTS) {
-		cout << "please insert your email: ";
-		getline(cin >> ws, email);
-
-		cout << "please insert your password: ";
-		getline(cin >> ws, password);
-
-		// check if correct
-		if (email == "owner@mylibrary.com" && password == "123456") {
-			userStatus = UserAccess::owner;
-		}
-		//check it is operation's email
-		else if (email == "operation@mylibrary.com" && password == "123456789") {
-			userStatus = UserAccess::operation;
+	if (choice == 0) {
+		if (email == owner->email && password == owner->password) {
+			cout << "Login successful (Owner)"<<endl;
+			return UserAccess::owner;
 		}
 		else {
-			attempts++;
-			cout << "Email or Password is Wrong (" << attempts << "/" << MAX_ATTEMPTS << ")" << endl;
-
-			if (attempts == MAX_ATTEMPTS) {
-				resetPassword(account);
-				userStatus = UserAccess::customer;
-				break;
-			}
-			// option to reset password early
-			char forgot;
-			cout << "Forgot password? (y/n): ";
-			cin >> forgot;
-			cin.ignore();
-			if (forgot == 'y' || forgot == 'Y') {
-				resetPassword(account);
-				userStatus = UserAccess::customer;
-				break;
-			}
+			
+			return UserAccess::customer; 
 		}
 	}
-
-	return userStatus;
+	else if (choice == 2) {
+		if (email == operation->email && password == operation->password) {
+			cout << "Login successful (Operation)"<<endl;
+			return UserAccess::operation;
+		}
+		else {
+			
+			return UserAccess::customer; 
+		}
+	}
+	else if (choice == 1) {
+		cout << "Login successful (Customer)"<<endl;
+		return UserAccess::customer;
+	}
+	else {
+		cout << "Invalid choice, defaulting to Customer"<<endl;
+		return UserAccess::customer;
+	}
 }
